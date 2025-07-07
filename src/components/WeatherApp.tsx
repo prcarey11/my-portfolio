@@ -3,18 +3,17 @@ import React, { useState, useEffect } from 'react';
 export default function WeatherApp() {
   const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
 
-  if (!apiKey) {
-    return <p>Please set your OpenWeatherMap API key in the .env file.</p>;
-  }  
-
+  // Hooks must be called unconditionally
   const [weather, setWeather] = useState<{ temp?: number; description?: string }>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!apiKey) return; // skip fetching if no API key
+
     async function fetchWeather() {
       try {
         const response = await fetch(
-          'https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=${apiKey}'
+          `https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=${apiKey}`
         );
         const data = await response.json();
         setWeather({
@@ -29,7 +28,12 @@ export default function WeatherApp() {
     }
 
     fetchWeather();
-  }, []);
+  }, [apiKey]);
+
+  // Handle no API key inside render
+  if (!apiKey) {
+    return <p>Please set your OpenWeatherMap API key in the .env file.</p>;
+  }
 
   if (loading) return <p>Loading weather...</p>;
 

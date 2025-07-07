@@ -10,6 +10,10 @@ export default function Home() {
         🪙 Crypto Price Dashboard
       </Link>
 
+      <Link to="/weather" className="project-link">
+        ☀️ Weather App
+      </Link>
+
       {/* Add more projects here later */}
     </main>
   );

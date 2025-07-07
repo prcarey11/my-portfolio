@@ -9,6 +9,9 @@ export default function Navbar() {
       <Link to="/crypto" style={linkStyle}>
         Crypto Dashboard
       </Link>
+      <Link to="/weather" style={linkStyle}>
+        Weather App
+      </Link>
       {/* Add more links here as you add projects */}
     </nav>
   );
