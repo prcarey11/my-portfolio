@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 export default function WeatherApp() {
   const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
 
-  const [cityInput, setCityInput] = useState('London');
-  const [city, setCity] = useState('London');
+  const [cityInput, setCityInput] = useState('');
+  const [city, setCity] = useState('');
   const [weather, setWeather] = useState<{
     tempC?: number;
     description?: string;
@@ -13,10 +13,11 @@ export default function WeatherApp() {
     sunrise?: number;
     sunset?: number;
     icon?: string;
+    timezone?: number;
   }>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isCelsius, setIsCelsius] = useState(false); // Start in Fahrenheit
+  const [isCelsius, setIsCelsius] = useState(false); // default to Fahrenheit
 
   const convertToF = (celsius: number) => (celsius * 9) / 5 + 32;
 
@@ -46,6 +47,7 @@ export default function WeatherApp() {
         sunrise: data.sys.sunrise,
         sunset: data.sys.sunset,
         icon: data.weather[0].icon,
+        timezone: data.timezone,
       });
       setCity(cityToFetch);
     } catch (err: any) {
@@ -57,18 +59,25 @@ export default function WeatherApp() {
   }
 
   function handleSearch() {
-    fetchWeather(cityInput);
+    if (cityInput.trim()) {
+      fetchWeather(cityInput.trim());
+    }
   }
 
   function toggleUnit() {
     setIsCelsius(prev => !prev);
   }
 
-  function formatTime(unix: number) {
-    return new Date(unix * 1000).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  function formatTime(unix: number, offset: number) {
+    const localTime = new Date((unix + offset) * 1000);
+    const hours = localTime.getUTCHours();
+    const minutes = localTime.getUTCMinutes();
+    const suffix = hours >= 12 ? 'PM' : 'AM';
+    const formattedHour = ((hours + 11) % 12) + 1;
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+
+    const utcOffset = `UTC${offset >= 0 ? '+' : ''}${offset / 3600}`;
+    return `${formattedHour}:${formattedMinutes} ${suffix} (${utcOffset})`;
   }
 
   if (!apiKey) {
@@ -130,9 +139,20 @@ export default function WeatherApp() {
           )}
 
           <p>💧 Humidity: {weather.humidity}%</p>
-          <p>🌬️ Wind: {weather.wind} {isCelsius ? 'm/s' : 'mph'}</p>
-          <p>🌅 Sunrise: {formatTime(weather.sunrise!)}</p>
-          <p>🌇 Sunset: {formatTime(weather.sunset!)}</p>
+          <p>
+            🌬️ Wind:{' '}
+            {isCelsius
+              ? weather.wind
+              : (weather.wind! * 2.23694).toFixed(1)}{' '}
+            {isCelsius ? 'm/s' : 'mph'}
+          </p>
+
+          {weather.sunrise && weather.sunset && weather.timezone !== undefined && (
+            <>
+              <p>🌅 Sunrise: {formatTime(weather.sunrise, weather.timezone)}</p>
+              <p>🌇 Sunset: {formatTime(weather.sunset, weather.timezone)}</p>
+            </>
+          )}
         </div>
       )}
     </div>
