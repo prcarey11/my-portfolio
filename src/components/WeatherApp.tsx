@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import './WeatherApp.css';
+import debounce from 'lodash.debounce';
+import axios from 'axios';
 
 export default function WeatherApp() {
   const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
 
   const [cityInput, setCityInput] = useState('');
   const [city, setCity] = useState('');
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [selectedCoords, setSelectedCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [weather, setWeather] = useState<{
     tempC?: number;
     description?: string;
@@ -69,6 +73,37 @@ export default function WeatherApp() {
     setIsCelsius(prev => !prev);
   }
 
+  React.useEffect(() => {
+    if (cityInput.length < 4) {
+      setSuggestions([]);
+      return;
+    }
+
+    const fetchSuggestions = async () => {
+      try {
+        const res = await axios.get('https://api.openweathermap.org/geo/1.0/direct', {
+          params: {
+            q: cityInput,
+            limit: 5,
+            appid: apiKey,
+          },
+        });
+        setSuggestions(res.data);
+      } catch (err) {
+        console.error('Error fetching suggestions:', err);
+        setSuggestions([]);
+      }
+    };
+
+    const debouncedFetch = debounce(fetchSuggestions, 500);
+    debouncedFetch();
+
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, [cityInput, apiKey]);
+
+
   function formatTime(unix: number, offset: number) {
     const localTime = new Date((unix + offset) * 1000);
     const hours = localTime.getUTCHours();
@@ -99,10 +134,30 @@ export default function WeatherApp() {
       <div className="controls">
         <input
           type="text"
-          value={cityInput}
-          onChange={e => setCityInput(e.target.value)}
           placeholder="Enter city name"
+          value={cityInput}
+          onChange={(e) => {
+            setCityInput(e.target.value);
+            setSelectedCoords(null); // reset selected coordinates if typing
+          }}
         />
+        {suggestions.length > 0 && (
+          <ul className="suggestions-dropdown">
+            {suggestions.map((sugg, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  setCityInput(`${sugg.name}${sugg.state ? `, ${sugg.state}` : ''}, ${sugg.country}`);
+                  setSelectedCoords({ lat: sugg.lat, lon: sugg.lon });
+                  setSuggestions([]);
+                }}
+              >
+                {sugg.name}
+                {sugg.state ? `, ${sugg.state}` : ''}, {sugg.country}
+              </li>
+            ))}
+          </ul>
+        )}
         <button onClick={handleSearch}>Search</button>
         {hasWeather && (
           <button onClick={toggleUnit}>

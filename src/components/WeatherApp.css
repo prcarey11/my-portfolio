@@ -93,3 +93,27 @@
 .controls button:hover {
   background-color: #3c4048;
 }
+
+.suggestions-dropdown {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: white;
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.suggestions-dropdown li {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.suggestions-dropdown li:hover {
+  background-color: #f0f0f0;
+}
