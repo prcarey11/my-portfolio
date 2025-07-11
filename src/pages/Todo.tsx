@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import TodoForm from '../components/TodoForm';
-import TodoItem from '../components/TodoItem';
+import TodoList from '../components/TodoList';
 
 type TodoItemType = {
   id: number;
@@ -13,7 +13,7 @@ const Todo = () => {
 
   const addTodo = (text: string) => {
     const newTodo: TodoItemType = {
-      id: Date.now(), // quick unique id
+      id: Date.now(),
       text,
       completed: false,
     };
@@ -34,18 +34,9 @@ const Todo = () => {
 
   return (
     <div className="todo-container">
-      <h1>Todo App</h1>
+      <h1>To-Do List</h1>
       <TodoForm onAddTodo={addTodo} />
-      <ul>
-        {todos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            onToggle={toggleTodo}
-            onDelete={deleteTodo}
-          />
-        ))}
-      </ul>
+      <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
     </div>
   );
 };
