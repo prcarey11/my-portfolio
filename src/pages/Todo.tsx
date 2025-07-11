@@ -2,43 +2,54 @@ import { useState } from 'react';
 import TodoForm from '../components/TodoForm';
 import TodoList from '../components/TodoList';
 
-type TodoItemType = {
+type TodoItem = {
   id: number;
   text: string;
   completed: boolean;
 };
 
-const Todo = () => {
-  const [todos, setTodos] = useState<TodoItemType[]>([]);
+export default function Todo() {
+  const [todos, setTodos] = useState<TodoItem[]>([]);
 
-  const addTodo = (text: string) => {
-    const newTodo: TodoItemType = {
+  function handleAdd(text: string) {
+    const newTodo: TodoItem = {
       id: Date.now(),
       text,
       completed: false,
     };
-    setTodos((prev) => [newTodo, ...prev]);
-  };
+    setTodos((prev) => [...prev, newTodo]);
+  }
 
-  const toggleTodo = (id: number) => {
+  function handleToggle(id: number) {
     setTodos((prev) =>
       prev.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
       )
     );
-  };
+  }
 
-  const deleteTodo = (id: number) => {
+  function handleDelete(id: number) {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  };
+  }
+
+  function handleUpdate(id: number, newText: string) {
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, text: newText } : todo
+      )
+    );
+  }
 
   return (
     <div className="todo-container">
       <h1>To-Do List</h1>
-      <TodoForm onAddTodo={addTodo} />
-      <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
+      <TodoForm onAdd={handleAdd} />
+      <TodoList
+        todos={todos}
+        onToggle={handleToggle}
+        onDelete={handleDelete}
+        onUpdate={handleUpdate}
+      />
     </div>
   );
-};
-
-export default Todo;
+}

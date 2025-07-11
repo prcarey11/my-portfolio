@@ -1,34 +1,30 @@
 import { useState, FormEvent } from 'react';
 
 type TodoFormProps = {
-  onAddTodo: (text: string) => void;
+  onAdd: (text: string) => void;
 };
 
-const TodoForm = ({ onAddTodo }: TodoFormProps) => {
-  const [input, setInput] = useState('');
+export default function TodoForm({ onAdd }: TodoFormProps) {
+  const [text, setText] = useState('');
 
-  const handleSubmit = (e: FormEvent) => {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (input.trim() === '') return;
-
-    onAddTodo(input.trim());
-    setInput('');
-  };
+    const trimmed = text.trim();
+    if (trimmed.length > 0) {
+      onAdd(trimmed);
+      setText('');
+    }
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="todo-form">
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Add a new task"
-        className="todo-input"
+        placeholder="Add a task"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
       />
-      <button type="submit" className="todo-button">
-        Add
-      </button>
+      <button type="submit">Add</button>
     </form>
   );
-};
-
-export default TodoForm;
+}

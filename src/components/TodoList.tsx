@@ -1,34 +1,32 @@
-import TodoItem from './TodoItem';
+import TodoItem from '../components/TodoItem';
 
-type TodoItemType = {
+type Todo = {
   id: number;
   text: string;
   completed: boolean;
 };
 
-type TodoListProps = {
-  todos: TodoItemType[];
+type Props = {
+  todos: Todo[];
   onToggle: (id: number) => void;
   onDelete: (id: number) => void;
+  onUpdate: (id: number, newText: string) => void;
 };
 
-const TodoList = ({ todos, onToggle, onDelete }: TodoListProps) => {
-  if (todos.length === 0) {
-    return <p>No tasks yet! Add some.</p>;
-  }
-
+export default function TodoList({ todos, onToggle, onDelete, onUpdate }: Props) {
   return (
     <ul className="todo-list">
       {todos.map((todo) => (
         <TodoItem
           key={todo.id}
-          todo={todo}
+          id={todo.id}
+          text={todo.text}
+          completed={todo.completed}
           onToggle={onToggle}
           onDelete={onDelete}
+          onUpdate={onUpdate}
         />
       ))}
     </ul>
   );
-};
-
-export default TodoList;
+}
