@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import TodoForm from '../components/TodoForm';
 import TodoList from '../components/TodoList';
+import '../components/Todo.css';
 
 type TodoItem = {
   id: number;
@@ -8,8 +9,11 @@ type TodoItem = {
   completed: boolean;
 };
 
+type Filter = 'all' | 'active' | 'completed';
+
 export default function Todo() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [filter, setFilter] = useState<Filter>('all');
 
   function handleAdd(text: string) {
     const newTodo: TodoItem = {
@@ -40,12 +44,40 @@ export default function Todo() {
     );
   }
 
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === 'active') return !todo.completed;
+    if (filter === 'completed') return todo.completed;
+    return true;
+  })
+
   return (
     <div className="todo-container">
       <h1>To-Do List</h1>
       <TodoForm onAdd={handleAdd} />
+
+      <div className="filters">
+        <button
+          onClick={() => setFilter('all')}
+          className={filter === 'all' ? 'active' : ''}
+        >
+          All
+        </button>
+        <button
+          onClick={() => setFilter('active')}
+          className={filter === 'active' ? 'active' : ''}
+        >
+          Active
+        </button>
+        <button
+          onClick={() => setFilter('completed')}
+          className={filter === 'completed' ? 'active' : ''}
+        >
+          Completed
+        </button>
+      </div>
+
       <TodoList
-        todos={todos}
+        todos={filteredTodos}
         onToggle={handleToggle}
         onDelete={handleDelete}
         onUpdate={handleUpdate}
