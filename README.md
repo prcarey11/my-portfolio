@@ -1,46 +1,70 @@
-# Getting Started with Create React App
+# My Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hi! My name is Philip Carey, and welcome to my portfolio! This is a React-based personal portfolio website showcasing some of my projects, (so far) including a Crypto Price Dashboard and a Weather App.
 
-## Available Scripts
+## Projects
 
-In the project directory, you can run:
+### Crypto Price Dashboard
+A real-time dashboard displaying cryptocurrency prices fetched from public APIs. It provides up-to-date market data and interactive charts.
 
-### `npm start`
+### Weather App
+A weather information app that allows users to search for any city worldwide. Features include:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Autocomplete suggestions for city names with country/state info
+- Temperature toggle between Fahrenheit and Celsius
+- Displays current weather conditions, humidity, wind speed, sunrise and sunset times adjusted for local timezone
+- Powered by OpenWeatherMap API
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (v14 or later recommended)
+- npm or yarn
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/prcarey11/my-portfolio.git
+   cd my-portfolio
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Install dependencies:
+   ```bash
+   npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Create a ```.env``` file in the root directory with your OpenWeatherMap API key (free to signup):
+   ```bash
+   REACT_APP_OPENWEATHER_API_KEY=your_api_key_here
 
-### `npm run eject`
+4. Start the development server:
+   ```bash
+   npm start
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Usage
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Navigate to `/` to view the homepage, which links to different portfolio projects.
+- Use the navigation bar to visit the **Crypto Price Dashboard** or the **Weather App**.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Crypto Price Dashboard
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Displays current cryptocurrency prices using a free third-party API.
+- Real-time data for popular coins like Bitcoin, Ethereum, etc.
+- Simple and clean design to demonstrate live data handling.
 
-## Learn More
+### Weather App Features
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Begin typing a city name (minimum 4 characters) to see autocomplete suggestions powered by OpenWeatherMap's geocoding API.
+- Click a suggestion or manually enter a full city name (e.g., "Berkeley, California, US") and press **Search** to fetch the weather.
+- Displays:
+  - Current temperature (with toggle between °F and °C)
+  - Weather description
+  - Humidity
+  - Wind speed (in `mph` or `m/s`)
+  - Sunrise and sunset times (displayed in local time with UTC offset)
+- Uses coordinate-based search when selecting a suggestion for more accurate results.
+- Responsive layout and user-friendly UI (mobile coming soon).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+Last Updated: July 11, 2025
