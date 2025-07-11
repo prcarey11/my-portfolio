@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './WeatherApp.css';
 import debounce from 'lodash.debounce';
 import axios from 'axios';
@@ -7,6 +7,7 @@ export default function WeatherApp() {
   const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
 
   const [cityInput, setCityInput] = useState('');
+  const [selectedCityString, setSelectedCityString] = useState('');
   const [city, setCity] = useState('');
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [selectedCoords, setSelectedCoords] = useState<{ lat: number; lon: number } | null>(null);
@@ -26,18 +27,21 @@ export default function WeatherApp() {
 
   const convertToF = (celsius: number) => (celsius * 9) / 5 + 32;
 
-  async function fetchWeather(cityToFetch: string) {
+  const fetchWeather = async () => {
     if (!apiKey) return;
+    if (!cityInput.trim()) return;
 
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
-          cityToFetch
-        )}&units=metric&appid=${apiKey}`
-      );
+      const url = selectedCoords
+        ? `https://api.openweathermap.org/data/2.5/weather?lat=${selectedCoords.lat}&lon=${selectedCoords.lon}&units=metric&appid=${apiKey}`
+        : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+            cityInput.trim()
+          )}&units=metric&appid=${apiKey}`;
+
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error('City not found');
@@ -54,26 +58,30 @@ export default function WeatherApp() {
         icon: data.weather[0].icon,
         timezone: data.timezone,
       });
-      setCity(cityToFetch);
+      setCity(`${data.name}, ${data.sys.country}`);
     } catch (err: any) {
       setError(err.message || 'Failed to fetch weather');
       setWeather({});
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  function handleSearch() {
-    if (cityInput.trim()) {
-      fetchWeather(cityInput.trim());
+  const handleSearch = () => {
+    fetchWeather();
+  };
+
+  const toggleUnit = () => {
+    setIsCelsius((prev) => !prev);
+  };
+
+  useEffect(() => {
+    // If input matches selected city exactly, skip fetching suggestions
+    if (cityInput === selectedCityString) {
+      setSuggestions([]);
+      return;
     }
-  }
 
-  function toggleUnit() {
-    setIsCelsius(prev => !prev);
-  }
-
-  React.useEffect(() => {
     if (cityInput.length < 4) {
       setSuggestions([]);
       return;
@@ -98,13 +106,10 @@ export default function WeatherApp() {
     const debouncedFetch = debounce(fetchSuggestions, 500);
     debouncedFetch();
 
-    return () => {
-      debouncedFetch.cancel();
-    };
-  }, [cityInput, apiKey]);
+    return () => debouncedFetch.cancel();
+  }, [cityInput, apiKey, selectedCityString]);
 
-
-  function formatTime(unix: number, offset: number) {
+  const formatTime = (unix: number, offset: number) => {
     const localTime = new Date((unix + offset) * 1000);
     const hours = localTime.getUTCHours();
     const minutes = localTime.getUTCMinutes();
@@ -113,14 +118,13 @@ export default function WeatherApp() {
     const formattedMinutes = minutes.toString().padStart(2, '0');
     const utcOffset = `UTC${offset >= 0 ? '+' : ''}${offset / 3600}`;
     return `${formattedHour}:${formattedMinutes} ${suffix} (${utcOffset})`;
-  }
+  };
 
   if (!apiKey) {
     return <p>Please set your OpenWeatherMap API key in the .env file.</p>;
   }
 
   const hasWeather = weather.tempC !== undefined;
-
   const displayTemp = hasWeather
     ? isCelsius
       ? weather.tempC!.toFixed(1)
@@ -131,38 +135,43 @@ export default function WeatherApp() {
     <div className="weather-app-container">
       <h2>Weather App</h2>
 
-      <div className="controls">
-        <input
-          type="text"
-          placeholder="Enter city name"
-          value={cityInput}
-          onChange={(e) => {
-            setCityInput(e.target.value);
-            setSelectedCoords(null); // reset selected coordinates if typing
-          }}
-        />
-        {suggestions.length > 0 && (
-          <ul className="suggestions-dropdown">
-            {suggestions.map((sugg, index) => (
-              <li
-                key={index}
-                onClick={() => {
-                  setCityInput(`${sugg.name}${sugg.state ? `, ${sugg.state}` : ''}, ${sugg.country}`);
-                  setSelectedCoords({ lat: sugg.lat, lon: sugg.lon });
-                  setSuggestions([]);
-                }}
-              >
-                {sugg.name}
-                {sugg.state ? `, ${sugg.state}` : ''}, {sugg.country}
-              </li>
-            ))}
-          </ul>
-        )}
+      <div className="search-wrapper">
+        <div className="controls">
+          <input
+            type="text"
+            placeholder="Enter city name"
+            value={cityInput}
+            onChange={(e) => {
+              setCityInput(e.target.value);
+              setSelectedCoords(null); // reset if typing
+              setSelectedCityString(''); // reset selected city string on typing
+            }}
+          />
+          {suggestions.length > 0 && (
+            <ul className="suggestions-dropdown">
+              {suggestions.map((sugg, index) => {
+                const fullName = `${sugg.name}${sugg.state ? `, ${sugg.state}` : ''}, ${sugg.country}`;
+                return (
+                  <li
+                    key={index}
+                    onClick={() => {
+                      setCityInput(fullName);
+                      setSelectedCoords({ lat: sugg.lat, lon: sugg.lon });
+                      setSuggestions([]);
+                      setSelectedCityString(fullName);
+                    }}
+                  >
+                    {fullName}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+
         <button onClick={handleSearch}>Search</button>
         {hasWeather && (
-          <button onClick={toggleUnit}>
-            Show °{isCelsius ? 'F' : 'C'}
-          </button>
+          <button onClick={toggleUnit}>Show °{isCelsius ? 'F' : 'C'}</button>
         )}
       </div>
 
@@ -172,12 +181,11 @@ export default function WeatherApp() {
           href="https://openweathermap.org/"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: '#0077cc', textDecoration: 'none'}}
+          style={{ color: '#0077cc', textDecoration: 'none' }}
         >
           OpenWeather
         </a>
       </footer>
-
 
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}

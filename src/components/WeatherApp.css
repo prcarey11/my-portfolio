@@ -94,6 +94,17 @@
   background-color: #3c4048;
 }
 
+.search-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 300px;
+}
+
+.search-wrapper input {
+  width: 100%;
+}
+
 .suggestions-dropdown {
   list-style: none;
   padding: 0;
@@ -107,10 +118,11 @@
   z-index: 10;
   width: 100%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  top: calc(100% + 4px);
 }
 
 .suggestions-dropdown li {
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
