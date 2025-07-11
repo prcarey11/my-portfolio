@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import CryptoDashboard from './components/CryptoDashboard';
 import Navbar from './components/Navbar';
 import WeatherApp from './components/WeatherApp';
+import Todo from './pages/Todo';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/crypto" element={<CryptoDashboard />} />
         <Route path="/weather" element={<WeatherApp />} />
+        <Route path="todo" element={<Todo />} />
       </Routes>
     </Router>
   );

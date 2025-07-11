@@ -12,7 +12,9 @@ export default function Navbar() {
       <Link to="/weather" style={linkStyle}>
         Weather App
       </Link>
-      {/* Add more links here as you add projects */}
+      <Link to="/todo" style={linkStyle}>
+        To-Do List App
+      </Link>
     </nav>
   );
 }

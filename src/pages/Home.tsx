@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function Home() {
   return (
     <main>
-      <h1>Welcome to My Portfolio</h1>
+      <h1>Welcome to My Portfolio!</h1>
       <p>Here are some of my projects:</p>
 
       <Link to="/crypto" className="project-link">
@@ -14,7 +14,9 @@ export default function Home() {
         ☀️ Weather App
       </Link>
 
-      {/* Add more projects here later */}
+      <Link to="/todo" className="project-link">
+        📝 To-Do List App
+      </Link>      
     </main>
   );
 }
