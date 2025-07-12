@@ -48,6 +48,10 @@ export default function Todo() {
     );
   }
 
+  function handleClearCompleted() {
+    setTodos((prev) => prev.filter((todo) => !todo.completed));
+  }
+
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
@@ -59,7 +63,7 @@ export default function Todo() {
   })
 
   return (
-    <div className="todo-container">
+    <div className='todo-container'>
       <h1>To-Do List</h1>
       <TodoForm onAdd={handleAdd} />
 
@@ -84,12 +88,22 @@ export default function Todo() {
         </button>
       </div>
 
-      <TodoList
-        todos={filteredTodos}
-        onToggle={handleToggle}
-        onDelete={handleDelete}
-        onUpdate={handleUpdate}
-      />
+      {todos.some((todo) => todo.completed) && (
+        <button className="clear-completed" onClick={handleClearCompleted}>
+          Clear Completed
+        </button>
+      )}
+
+      {filteredTodos.length === 0 ? (
+        <p className="no-todos">Nothing on the To-Do List! 😎</p>
+      ) : (
+        <TodoList
+          todos={filteredTodos}
+          onToggle={handleToggle}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        />
+      )}
     </div>
   );
 }
