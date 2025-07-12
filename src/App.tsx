@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import CryptoDashboard from './components/CryptoDashboard';
 import Navbar from './components/Navbar';
@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/crypto" element={<CryptoDashboard />} />
         <Route path="/weather" element={<WeatherApp />} />
-        <Route path="todo" element={<Todo />} />
+        <Route path="/todo" element={<Todo />} />
       </Routes>
     </Router>
   );
