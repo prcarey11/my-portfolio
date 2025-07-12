@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TodoForm from '../components/TodoForm';
 import TodoList from '../components/TodoList';
 import '../components/Todo.css';
@@ -12,7 +12,11 @@ type TodoItem = {
 type Filter = 'all' | 'active' | 'completed';
 
 export default function Todo() {
-  const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [todos, setTodos] = useState<TodoItem[]>(() => {
+    const saved = localStorage.getItem('todos');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [filter, setFilter] = useState<Filter>('all');
 
   function handleAdd(text: string) {
@@ -43,6 +47,10 @@ export default function Todo() {
       )
     );
   }
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const filteredTodos = todos.filter((todo) => {
     if (filter === 'active') return !todo.completed;
