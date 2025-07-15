@@ -1,11 +1,11 @@
 import './App.css';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import CryptoDashboard from './components/CryptoDashboard';
-import Navbar from './components/Navbar';
-import WeatherApp from './components/WeatherApp';
+import Home from './pages/Home/Home';
+import CryptoDashboard from './components/CryptoDashboard/CryptoDashboard';
+import Navbar from './components/shared/Navbar';
+import WeatherApp from './components/WeatherApp/WeatherApp';
 import Todo from './pages/Todo';
-import About from './pages/About';
+import About from './pages/About/About';
 
 function App() {
   return (
