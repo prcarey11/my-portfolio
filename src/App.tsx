@@ -5,7 +5,7 @@ import CryptoDashboard from './components/CryptoDashboard/CryptoDashboard';
 import Navbar from './components/shared/Navbar';
 import WeatherApp from './components/WeatherApp/WeatherApp';
 import Todo from './pages/Todo';
-import FinanceTrackerPage from './pages/FinanceTrackerPage';
+import FinanceTrackerPage from './pages/FinanceTracker/FinanceTrackerPage';
 import About from './pages/About/About';
 
 function App() {

@@ -1,0 +1,72 @@
+/* Card wrapper that contains the whole form */
+.transaction-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+/* The form itself uses vertical layout */
+.add-transaction-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optional: heading inside the form */
+.add-transaction-form h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Each field block gets vertical spacing */
+.add-transaction-form > div {
+  margin-bottom: 1.2rem;
+}
+
+/* Input fields and selects: full width, styled */
+.add-transaction-form input,
+.add-transaction-form select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* Label styling for date/type fields if you use them */
+.add-transaction-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Error message text */
+.add-transaction-form small {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+  display: block;
+}
+
+/* The submit button */
+.add-transaction-form button {
+  background-color: #007bff;
+  color: white;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Disabled button appearance */
+.add-transaction-form button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}

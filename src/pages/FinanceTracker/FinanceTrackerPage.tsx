@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Transaction } from '../types/finance';
-import AddTransactionForm from '../components/FinanceTracker/AddTransactionForm';
-import BalanceSummary from '../components/FinanceTracker/BalanceSummary';
-import TransactionList from '../components/FinanceTracker/TransactionList';
+import { Transaction } from '../../types/finance';
+import AddTransactionForm from '../../components/FinanceTracker/AddTransactionForm';
+import BalanceSummary from '../../components/FinanceTracker/BalanceSummary';
+import TransactionList from '../../components/FinanceTracker/TransactionList';
+import './FinanceTrackerPage.css';
 
 const STORAGE_KEY = 'finance-tracker-transactions';
 
@@ -33,12 +34,19 @@ const FinanceTrackerPage: React.FC = () => {
   return (
     <div className="finance-tracker">
       <h1>Finance Tracker</h1>
+
       <BalanceSummary transactions={transactions} />
-      <AddTransactionForm onAdd={addTransaction} />
-      <TransactionList
-        transactions={transactions}
-        onDelete={deleteTransaction}
-      />
+
+      <div className="transaction-card">
+        <AddTransactionForm onAdd={addTransaction} />
+      </div>
+
+      <div className="transaction-list">
+        <TransactionList
+          transactions={transactions}
+          onDelete={deleteTransaction}
+        />
+      </div>
     </div>
   );
 };
