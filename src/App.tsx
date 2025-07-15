@@ -5,6 +5,7 @@ import CryptoDashboard from './components/CryptoDashboard/CryptoDashboard';
 import Navbar from './components/shared/Navbar';
 import WeatherApp from './components/WeatherApp/WeatherApp';
 import Todo from './pages/Todo';
+import FinanceTrackerPage from './pages/FinanceTrackerPage';
 import About from './pages/About/About';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/crypto" element={<CryptoDashboard />} />
         <Route path="/weather" element={<WeatherApp />} />
         <Route path="/todo" element={<Todo />} />
+        <Route path="/finance" element={<FinanceTrackerPage />} />
         <Route path="/about" element={<About />} />
       </Routes>
     </Router>

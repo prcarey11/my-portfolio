@@ -31,6 +31,11 @@ export default function Home() {
               📝 To-Do List App
             </Link>
           </li>
+          <li>
+            <Link to="/finance" className="project-link">
+              🏛️ Finance Tracker 
+            </Link>
+          </li>
         </ul>
       </section>
 

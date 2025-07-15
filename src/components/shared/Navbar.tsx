@@ -15,6 +15,9 @@ export default function Navbar() {
       <Link to="/todo" style={linkStyle}>
         To-Do List App
       </Link>
+      <Link to="/finance" style={linkStyle}>
+        Finance Tracker
+      </Link>
       <Link to="/about" style={linkStyle}>
         About Me
       </Link>
