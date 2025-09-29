@@ -1,0 +1,35 @@
+.crypto-dashboard {
+  max-width: 900px;
+  margin: 2rem auto;
+  font-family: Arial, sans-serif;
+}
+
+.crypto-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;   /* was 1rem */
+  margin-bottom: 1.5rem;
+}
+
+
+.crypto-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.crypto-stats {
+  text-align: left;      /* aligns stats to left */
+  margin-top: 0.5rem;    /* spacing above stats */
+  font-size: 0.9rem;     /* slightly smaller than header */
+  color: #555;           /* subtle text color */
+}
+
+.coin-logo {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
